@@ -17,7 +17,7 @@ This project was developed as a portfolio application focused on:
 
 The live demo of the application can be accessed here
 
-https://cerebloomai.lovable.app
+https://cere-bloom-insights--masemula0527.replit.app
 
 ---
 
