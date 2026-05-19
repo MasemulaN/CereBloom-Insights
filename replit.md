@@ -1,36 +1,45 @@
-# [Project name]
+# CereBloom
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A personal wellness dashboard that turns emotions into insights — track moods, analyze journal sentiment, and discover emotional patterns.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- Required env: `DATABASE_URL` — Postgres connection string
+- `cd cerebloom && streamlit run app.py --server.port 5000 --server.address 0.0.0.0` — run the app
+- Required Python packages: streamlit, pandas, plotly, textblob, pdfplumber, pytesseract, Pillow, nltk, openpyxl
 
 ## Stack
 
-- pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
-- DB: PostgreSQL + Drizzle ORM
-- Validation: Zod (`zod/v4`), `drizzle-zod`
-- API codegen: Orval (from OpenAPI spec)
-- Build: esbuild (CJS bundle)
+- Python 3.11, Streamlit
+- Storage: SQLite (via `data/cerebloom.db`)
+- Sentiment: TextBlob (polarity + subjectivity)
+- Charts: Plotly
+- File parsing: pdfplumber (PDF), pytesseract + Pillow (images/OCR), pandas (CSV)
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `cerebloom/app.py` — main home page entry point
+- `cerebloom/pages/` — multi-page Streamlit pages (Journal, Mood Tracker, Insights, Wellness Data, Reports)
+- `cerebloom/utils/db.py` — SQLite helpers (journals, moods, wellness files)
+- `cerebloom/utils/sentiment.py` — TextBlob sentiment + mood utilities
+- `cerebloom/data/cerebloom.db` — local SQLite database (auto-created)
+- `cerebloom/uploads/` — uploaded wellness files stored here
+- `cerebloom/.streamlit/config.toml` — theme (earthy tones) and server config
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- SQLite chosen for local-first storage — no external DB required, all data stays on device
+- TextBlob used for sentiment (polarity-based, not keyword-only) — supports nuanced text scoring
+- Streamlit multi-page app pattern using `pages/` directory for clean navigation
+- pytesseract + pdfplumber handle file text extraction; audio files saved but not transcribed (placeholder)
+- Mood valence mapping converts categorical moods to numeric scores for trend charts
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- **Journal**: Write entries, auto-analyze sentiment, browse/search history
+- **Mood Tracker**: Log mood + intensity, view charts over time
+- **Insights**: Mood trend chart, sentiment distribution pie, personalized pattern summary
+- **Wellness Data**: Upload PDF/images/CSV/audio, extract text, run sentiment analysis
+- **Reports**: Consolidated view of all data with sentiment summary + wellness recommendations
 
 ## User preferences
 
@@ -38,7 +47,9 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- NLTK corpora (TextBlob) downloaded on first run — takes ~30 seconds on cold start
+- pytesseract requires tesseract system binary; OCR may fail if not installed in Nix env
+- `cerebloom/data/` and `cerebloom/uploads/` are auto-created if missing
 
 ## Pointers
 
