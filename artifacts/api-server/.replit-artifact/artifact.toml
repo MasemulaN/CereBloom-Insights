@@ -1,5 +1,5 @@
 kind = "api"
-previewPath = "/api" # TODO - should be excluded from preview in the first place
+previewPath = "/api"
 title = "API Server"
 version = "1.0.0"
 id = "3B4_FFSkEVBkAeYMFRJ2e"
@@ -30,3 +30,19 @@ NODE_ENV = "production"
 
 [services.production.health.startup]
 path = "/api/healthz"
+
+[[services]]
+localPort = 5000
+name = "CereBloom"
+paths = ["/"]
+
+[services.development]
+run = "cd /home/runner/workspace/cerebloom && streamlit run app.py --server.port 5000 --server.address 0.0.0.0"
+
+[services.production]
+
+[services.production.run]
+args = ["sh", "-c", "cd /home/runner/workspace/cerebloom && streamlit run app.py --server.port 5000 --server.address 0.0.0.0"]
+
+[services.production.run.env]
+PORT = "5000"
